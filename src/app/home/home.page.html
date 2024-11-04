@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Todo List
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-text-center">
+  <ion-segment [(ngModel)]="segment" mode="ios">
+    <ion-segment-button value="Doing">
+      <ion-label>Doing</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="Done">
+      <ion-label>Done</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!---- ========= DOING SEGMENT ========= ---->
+  <ion-list *ngIf="segment === 'Doing'">
+    <ng-container *ngFor="let task of tasks; let i = index">
+      <ion-item *ngIf="task.status === false">
+        <ion-label>{{task.name}}</ion-label>
+        <ion-checkbox [(ngModel)]="task.status" class="checkbox" justify="end" ></ion-checkbox>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+
+  <!---- ========= DONE SEGMENT ========= ---->
+  <ion-list *ngIf="segment === 'Done'">
+    <ng-container *ngFor="let task of tasks, let i = index">
+      <ion-item *ngIf="task.status === true">
+        <ion-label>{{task.name}}</ion-label>
+        <ion-button *ngIf="task.status === true" (click)="deleteTask(i)" fill="outline" color="danger">
+          Remove
+        </ion-button>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+
+  <!---- ========= INPUT TO WRITE NEW TASK ========= ---->
+  <ion-list>
+    <ion-item *ngIf="segment === 'Doing'" class="item-input">
+      <ion-input label="New Task" placeholder="Enter text" #taskInput class="styled-input" fill="outline" color="tertiary"></ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-button 
+    (click)="addNewTask(taskInput.value ? taskInput.value.toString() : '')" 
+    fill="outline" 
+    color="tertiary"
+    *ngIf="segment === 'Doing'">
+    Add a new task
+  </ion-button>
+
+
+
+
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>Done by: CactuDev</ion-title>
+  </ion-toolbar>
+</ion-footer>
