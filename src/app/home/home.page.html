@@ -1,12 +1,12 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class="toolbar"> 
     <ion-title>
       Todo List
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding ion-text-center">
+<ion-content class="ion-padding ion-text-center" id="container">
   <ion-segment [(ngModel)]="segment" mode="ios">
     <ion-segment-button value="Doing">
       <ion-label>Doing</ion-label>
@@ -18,46 +18,49 @@
 
   <!---- ========= DOING SEGMENT ========= ---->
   <ion-list *ngIf="segment === 'Doing'">
-    <ng-container *ngFor="let task of tasks; let i = index">
-      <ion-item *ngIf="task.status === false">
-        <ion-label>{{task.name}}</ion-label>
-        <ion-checkbox [(ngModel)]="task.status" class="checkbox" justify="end" ></ion-checkbox>
-      </ion-item>
-    </ng-container>
+    <ion-list [inset]="true" *ngFor="let task of tasks; let i = index">
+      <ng-container *ngIf="task.status === false">
+        <ion-item>
+          <ion-label>{{task.name}}</ion-label>
+          <ion-checkbox (click)="changeStatus(i)" class="checkbox" justify="end"></ion-checkbox>
+        </ion-item>
+      </ng-container>
+    </ion-list>
   </ion-list>
 
   <!---- ========= DONE SEGMENT ========= ---->
   <ion-list *ngIf="segment === 'Done'">
-    <ng-container *ngFor="let task of tasks, let i = index">
-      <ion-item *ngIf="task.status === true">
-        <ion-label>{{task.name}}</ion-label>
-        <ion-button *ngIf="task.status === true" (click)="deleteTask(i)" fill="outline" color="danger">
-          Remove
-        </ion-button>
-      </ion-item>
-    </ng-container>
+    <ion-list [inset]="true" *ngFor="let task of tasks; let i = index">
+      <ng-container *ngIf="task.status === true">
+        <ion-item>
+          <ion-label>{{task.name}}</ion-label>
+          <ion-button (click)="presentActionSheet(i)" fill="outline" color="danger">
+            Options
+          </ion-button>
+        </ion-item>
+      </ng-container>
+    </ion-list>
   </ion-list>
 
   <!---- ========= INPUT TO WRITE NEW TASK ========= ---->
-  <ion-list>
-    <ion-item *ngIf="segment === 'Doing'" class="item-input">
-      <ion-input label="New Task" placeholder="Enter text" #taskInput class="styled-input" fill="outline" color="tertiary"></ion-input>
-    </ion-item>
-  </ion-list>
+  <ion-item  *ngIf="segment === 'Doing'">
+    <ion-input label="New Task" #taskInput label-placement="floating" fill="outline" placeholder="Enter text"></ion-input>
+  </ion-item>
   <ion-button 
     (click)="addNewTask(taskInput.value ? taskInput.value.toString() : '')" 
     fill="outline" 
     color="tertiary"
+    class="buttonTask"
     *ngIf="segment === 'Doing'">
-    Add a new task
+    save task
   </ion-button>
 
+  
 
-
-
-</ion-content>
+</ion-content>  
 <ion-footer>
   <ion-toolbar>
-    <ion-title>Done by: CactuDev</ion-title>
+    <ion-title align="center">Done by: CactuDev</ion-title>
   </ion-toolbar>
 </ion-footer>
+
